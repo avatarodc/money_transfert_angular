@@ -1,0 +1,61 @@
+/* quick-actions.component.css */
+:host {
+  display: block;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.transaction-item {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom spinner colors */
+.custom-spinner circle {
+  stroke: #3B82F6 !important;
+}
+
+/* Smooth transitions */
+.hover\:bg-gray-50 {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Card hover effects */
+.rounded-2xl {
+  transition: transform 0.2s ease-in-out;
+}
+
+.rounded-2xl:hover {
+  transform: translateY(-2px);
+}
+
+/* Status badge styles */
+.status-badge {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Gradient text animation */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.bg-gradient-to-r {
+  background-size: 200% auto;
+  animation: gradient 5s ease infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .p-6 {
+    padding: 1rem;
+  }
+}

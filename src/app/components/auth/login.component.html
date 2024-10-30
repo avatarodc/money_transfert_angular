@@ -1,0 +1,124 @@
+<!-- login.component.html -->
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-6 relative overflow-hidden">
+  <!-- Éléments décoratifs d'arrière-plan -->
+  <div class="absolute inset-0 overflow-hidden">
+    <!-- Cercles décoratifs -->
+    <svg class="absolute -top-24 -right-24 w-96 h-96 text-purple-400 opacity-20" fill="currentColor" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="50"/>
+    </svg>
+    <svg class="absolute -bottom-32 -left-32 w-[500px] h-[500px] text-indigo-400 opacity-20" fill="currentColor" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="50"/>
+    </svg>
+
+    <!-- Motifs géométriques -->
+    <div class="absolute top-1/4 left-10 w-20 h-20 text-pink-300 opacity-20">
+      <svg fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 0L1.5 6v12L12 24l10.5-6V6L12 0zm0 2.3l9 5.2-9 5.2-9-5.2 9-5.2z"/>
+      </svg>
+    </div>
+    <div class="absolute bottom-1/4 right-10 w-16 h-16 text-indigo-300 opacity-20">
+      <svg fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 22.5L0 12 12 1.5 24 12 12 22.5zM12 4.5L3 12l9 7.5 9-7.5-9-7.5z"/>
+      </svg>
+    </div>
+
+    <!-- Vagues décoratives -->
+    <div class="absolute bottom-0 left-0 right-0 h-32 opacity-20">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="text-white">
+        <path fill="currentColor" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,208C672,213,768,203,864,170.7C960,139,1056,85,1152,69.3C1248,53,1344,75,1392,85.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Card du formulaire avec effet glassmorphism -->
+  <div class="bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 hover:scale-[1.02] relative z-10">
+    <!-- En-tête avec icône -->
+    <div class="px-8 pt-8 pb-4">
+      <!-- Icône décorative centrale -->
+      <div class="w-20 h-20 mx-auto mb-4 text-indigo-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </div>
+      <h2 class="text-3xl font-bold text-center bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        Bienvenue
+      </h2>
+      <p class="text-sm text-gray-500 text-center mt-2">
+        Connectez-vous à votre compte
+      </p>
+    </div>
+
+    <!-- Formulaire -->
+    <div class="p-8">
+      <form (ngSubmit)="onLogin($event)" class="space-y-6">
+        <!-- Champ téléphone avec nouvel icon -->
+        <div class="space-y-2">
+          <div class="relative group">
+            <div class="absolute left-3 top-3 h-5 w-5 text-gray-400 transition-colors duration-200 group-hover:text-indigo-500">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3h5m0 0v5m0-5l-6 6M5 3a2 2 0 00-2 2v1c0 8.284 6.716 15 15 15h1a2 2 0 002-2v-3.28a1 1 0 00-.684-.948l-4.493-1.498a1 1 0 00-1.21.502l-1.13 2.257a11.042 11.042 0 01-5.516-5.517l2.257-1.13a1 1 0 00.502-1.21L9.228 3.683A1 1 0 008.279 3H5z"/>
+              </svg>
+            </div>
+            <input
+              type="tel"
+              id="phone"
+              [(ngModel)]="phone"
+              name="phone"
+              class="pl-10 w-full h-11 bg-gray-50 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all px-3 group-hover:border-indigo-500"
+              required
+              placeholder="+221 7X XXX XX XX"
+              pattern="\+221 7[0-9] [0-9]{3} [0-9]{2} [0-9]{2}"
+              maxlength="19">
+          </div>
+        </div>
+
+        <!-- Champ mot de passe avec nouvel icon -->
+        <div class="space-y-2">
+          <div class="relative group">
+            <div class="absolute left-3 top-3 h-5 w-5 text-gray-400 transition-colors duration-200 group-hover:text-indigo-500">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"/>
+              </svg>
+            </div>
+            <input
+              type="password"
+              id="password"
+              [(ngModel)]="password"
+              name="password"
+              class="pl-10 w-full h-11 bg-gray-50 rounded-lg border border-gray-200 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all px-3 group-hover:border-indigo-500"
+              required
+              placeholder="****"
+              maxlength="4"
+              pattern="[0-9]{4}"
+              inputmode="numeric">
+          </div>
+        </div>
+
+        <!-- Bouton de connexion amélioré -->
+        <button
+          type="submit"
+          [disabled]="isLoading"
+          class="w-full h-11 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 relative overflow-hidden group">
+          <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <ng-container *ngIf="isLoading">
+            <svg class="animate-spin h-5 w-5 text-white relative z-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="relative z-10">Connexion en cours...</span>
+          </ng-container>
+          <span *ngIf="!isLoading" class="relative z-10">Se connecter</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Pied de page -->
+    <div class="px-8 pb-8">
+      <button
+        (click)="onRegister()"
+        class="w-full text-sm text-indigo-600 hover:text-indigo-500 font-medium transition-colors duration-200">
+        Pas encore de compte ? S'inscrire
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+  <app-header class="mb-8"></app-header>
+  <div class="container mx-auto px-4 flex flex-col space-y-8">
+    <ng-container *ngIf="apiService.isClient()">
+      <app-qr-code></app-qr-code>
+      <app-quick-actions></app-quick-actions>
+      <app-recent-transactions></app-recent-transactions>
+    </ng-container>
+    <ng-container *ngIf="apiService.isAdmin(); else notAdmin">
+      <div class="flex flex-col lg:grid lg:grid-cols-3 gap-4 md:gap-6">
+        <div class="w-full lg:col-span-1 order-2 lg:order-1">
+          <app-recent-transactions></app-recent-transactions>
+        </div>
+        <div class="w-full lg:col-span-2 order-1 lg:order-2">
+          <app-dashboard-admin></app-dashboard-admin>
+        </div>
+      </div>
+    </ng-container>
+      <app-footer></app-footer>
+    <ng-template #notAdmin>
+      <p>Non admin</p>
+    </ng-template>
+  </div>

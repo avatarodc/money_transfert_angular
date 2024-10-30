@@ -1,0 +1,26 @@
+<mat-card class="mx-4 mt-4 relative z-10 bg-white shadow-lg rounded-xl overflow-hidden">
+
+  <mat-card-content class="p-6">
+    <div class="text-3xl font-bold my-4 text-gray-800">
+      {{wallet?.balance | number}} {{wallet?.currency}}
+    </div>
+    <div class="grid grid-cols-3 gap-6">
+      <button mat-button class="flex flex-col items-center p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition duration-300">
+        <mat-icon class="text-blue-600 text-2xl mb-2">send</mat-icon>
+        <span class="text-sm font-medium text-gray-700">Envoyer</span>
+      </button>
+      <button mat-button class="flex flex-col items-center p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition duration-300">
+        <mat-icon class="text-blue-600 text-2xl mb-2">add_circle</mat-icon>
+        <span class="text-sm font-medium text-gray-700">Dépôt</span>
+      </button>
+      <button mat-button class="flex flex-col items-center p-4 bg-blue-50 rounded-lg shadow hover:bg-blue-100 transition duration-300">
+        <mat-icon class="text-blue-600 text-2xl mb-2">credit_card</mat-icon>
+        <span class="text-sm font-medium text-gray-700">Retrait</span>
+      </button>
+    </div>
+  </mat-card-content>
+  <mat-card-footer class="bg-gradient-to-r from-blue-500 to-indigo-600 p-4">
+    <mat-card-title class="text-white text-lg font-semibold">Solde disponible</mat-card-title>
+
+  </mat-card-footer>
+</mat-card>
