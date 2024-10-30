@@ -14,13 +14,6 @@ export class QrCodeComponent implements OnInit {
   wallet: Wallet | null = null;
   qrData: string = '';
   showBalance: boolean = true;
-  isMobile = window.innerWidth < 640;
-
-  constructor() {
-    window.addEventListener('resize', () => {
-      this.isMobile = window.innerWidth < 640;
-    });
-  }
 
   ngOnInit() {
     this.qrData = JSON.stringify({

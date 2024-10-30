@@ -1,0 +1,22 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+
+.relative {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Positionne le menu juste en dessous de l'image */
+  left: 0;
+  background-color: white;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 8px; /* Espace entre l'image et le menu */
+}

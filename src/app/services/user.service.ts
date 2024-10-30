@@ -16,12 +16,15 @@ import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { HttpHeaders } from '@angular/common/http';
+import {Transaction} from '../models/transaction.model';
+import {Contact} from '../models/contact.model';
+import {HttpOptions} from '../models/http-options.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService extends ApiService {
-  private readonly BASE_PATH = `${environment.apiUrl}/users`;
+  private readonly BASE_PATH = `/users`;
 
   // Récupérer l'utilisateur connecté
   getCurrentUser(): Observable<ApiResponse<User>> {
@@ -131,4 +134,16 @@ export class UserService extends ApiService {
     // Si vous utilisez un BehaviorSubject pour l'état de connexion
     // this.currentUserSubject.next(null);
   }
+
+  // Mettre à jour le profil utilisateur avec FormData
+  updateProfile(userId: string, formData: FormData, options?: HttpOptions): Observable<ApiResponse<User>> {
+    return this.patch<User>(`${this.BASE_PATH}/${userId}`, formData,{
+      ...options,
+      headers: options?.headers || new HttpHeaders({
+        'Accept': 'application/json'
+      })
+    });
+  }
+
+
 }

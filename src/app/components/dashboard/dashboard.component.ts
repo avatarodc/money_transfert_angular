@@ -7,7 +7,9 @@ import { RecentTransactionsComponent } from '../recent-transactions/recent-trans
 import { FooterComponent } from '../footer/footer.component';
 import { DashboardAdminComponent } from '../../admin/dashboard-admin/dashboard-admin.component';
 import { QrCodeComponent } from '../qr-code/qr-code.component';
+import {DemandeListComponent} from '../demande/demande-list.component';
 import { ApiService } from '../../services/api.service';
+import {ProfileComponent} from '../profile/profile.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +22,10 @@ import { ApiService } from '../../services/api.service';
     DashboardAdminComponent,
     QuickActionsComponent,
     RecentTransactionsComponent,
-    FooterComponent
+    DemandeListComponent,
+    FooterComponent,
+    ProfileComponent
+
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']

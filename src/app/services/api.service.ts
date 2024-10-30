@@ -29,14 +29,14 @@ export class ApiService {
   }
 
   private initializeUserRole(): void {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token'); // ou votre clé de stockage du token
     if (token) {
       try {
         const decodedToken = this.jwtHelper.decodeToken(token);
-        this.currentUserRole = decodedToken.role;
+        this.currentUserRole = decodedToken.role; // Assurez-vous que 'role' correspond à la clé dans votre token
       } catch (error) {
         console.error('Erreur lors du décodage du token:', error);
-        this.currentUserRole = UserRole.USER;
+        this.currentUserRole = UserRole.USER; // Valeur par défaut
       }
     }
   }
@@ -83,6 +83,19 @@ export class ApiService {
       { ...this.defaultOptions, ...options }
     ).pipe(
       tap(response => this.logResponse('DELETE', fullUrl, response)),
+      catchError(error => this.handleError(error))
+    );
+  }
+
+  // Méthode PATCH ajoutée
+  protected patch<T>(endpoint: string, data: any, options?: HttpOptions): Observable<ApiResponse<T>> {
+    const fullUrl = `${this.baseUrl}${endpoint}`;
+    return this.http.patch<ApiResponse<T>>(
+      fullUrl,
+      data,
+      { ...this.defaultOptions, ...options }
+    ).pipe(
+      tap(response => this.logResponse('PATCH', fullUrl, response)),
       catchError(error => this.handleError(error))
     );
   }
