@@ -84,4 +84,21 @@ export class QuickActionsComponent implements OnInit {
   trackByLabel(index: number, action: any): string {
     return action.label;
   }
+
+  getSenderInfo(transaction: any) {
+    if (transaction.senderWallet?.user) {
+      const user = transaction.senderWallet.user;
+      return `${user.firstName} ${user.lastName} (${user.phoneNumber})`;
+    }
+    return 'Expéditeur inconnu';
+  }
+
+  getReceiverInfo(transaction: any) {
+    if (transaction.receiverWallet?.user) {
+      const user = transaction.receiverWallet.user;
+      console.log("User receveur:", user);
+      return `${user.firstName} ${user.lastName} (${user.phoneNumber})`;
+    }
+    return 'Destinataire inconnu';
+  }
 }

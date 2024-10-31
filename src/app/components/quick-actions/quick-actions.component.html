@@ -106,10 +106,14 @@
                       </div>
                       <div>
                         <p class="font-medium text-gray-900 group-hover:text-red-600 transition-colors text-sm sm:text-base">
-                          {{transaction.recipientName || 'Destinataire'}}
+                          {{ transaction.receiverWallet?.user ?
+                            transaction.receiverWallet.user.firstName + ' ' + transaction.receiverWallet.user.lastName +
+                            ' (' + transaction.receiverWallet.user.phoneNumber + ')' :
+                            'Destinataire inconnu'
+                          }}
                         </p>
                         <p class="text-xs sm:text-sm text-gray-500">
-                          {{transaction.date | date:'longDate'}}
+                          {{transaction.createdAt | date:'longDate'}}
                         </p>
                       </div>
                     </div>
@@ -154,10 +158,14 @@
                       </div>
                       <div>
                         <p class="font-medium text-gray-900 group-hover:text-green-600 transition-colors text-sm sm:text-base">
-                          {{transaction.senderName || 'Expéditeur'}}
+                          {{ transaction.senderWallet?.user ?
+                            transaction.senderWallet.user.firstName + ' ' + transaction.senderWallet.user.lastName +
+                            ' (' + transaction.senderWallet.user.phoneNumber + ')' :
+                            'Expéditeur inconnu'
+                          }}
                         </p>
                         <p class="text-xs sm:text-sm text-gray-500">
-                          {{transaction.date | date:'longDate'}}
+                          {{transaction.createdAt | date:'longDate'}}
                         </p>
                       </div>
                     </div>

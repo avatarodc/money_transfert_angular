@@ -1,9 +1,16 @@
+import { CommonModule } from '@angular/common';
+import { FooterComponent } from '../footer/footer.component';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'] ,
+  standalone: true,
+  imports: [
+    CommonModule,
+    FooterComponent
+  ]
 })
 export class ProfileComponent {
   profileImage: string | null = null;

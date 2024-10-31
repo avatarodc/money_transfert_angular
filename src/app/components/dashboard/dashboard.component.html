@@ -1,22 +1,43 @@
-  <app-header class="mb-8"></app-header>
-  <div class="container mx-auto px-4 flex flex-col space-y-8">
-    <ng-container *ngIf="apiService.isClient()">
-      <app-qr-code></app-qr-code>
-      <app-quick-actions></app-quick-actions>
-      <app-recent-transactions></app-recent-transactions>
-    </ng-container>
-    <ng-container *ngIf="apiService.isAdmin(); else notAdmin">
-      <div class="flex flex-col lg:grid lg:grid-cols-3 gap-4 md:gap-6">
-        <div class="w-full lg:col-span-1 order-2 lg:order-1">
-          <app-recent-transactions></app-recent-transactions>
-        </div>
-        <div class="w-full lg:col-span-2 order-1 lg:order-2">
-          <app-dashboard-admin></app-dashboard-admin>
-        </div>
+<app-header class="mb-4 md:mb-8"></app-header>
+
+<div class="container mx-auto px-2 md:px-4 flex flex-col space-y-4 md:space-y-8">
+
+  <ng-container *ngIf="apiService.isClient()">
+    <!-- QR Code avec conteneur élégant -->
+    <div class="flex justify-center w-full">
+      <div class="w-full md:w-96 lg:w-[420px] bg-white rounded-xl shadow-md p-4 md:p-6">
+        <app-qr-code class="block"></app-qr-code>
       </div>
-    </ng-container>
-      <app-footer></app-footer>
-    <ng-template #notAdmin>
-      <p>Non admin</p>
-    </ng-template>
-  </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="w-full">
+      <app-quick-actions class="block"></app-quick-actions>
+    </div>
+
+    <!-- Transactions récentes -->
+    <div class="w-full">
+      <app-recent-transactions class="block"></app-recent-transactions>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="apiService.isAdmin(); else notAdmin">
+    <div class="flex flex-col lg:grid lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6">
+      <!-- Colonne transactions récentes -->
+      <div class="w-full lg:col-span-1 order-2 lg:order-1">
+        <app-recent-transactions class="block bg-white rounded-lg shadow-sm"></app-recent-transactions>
+      </div>
+
+      <!-- Dashboard admin principal -->
+      <div class="w-full lg:col-span-2 order-1 lg:order-2">
+        <app-dashboard-admin class="block bg-white rounded-lg shadow-sm"></app-dashboard-admin>
+      </div>
+    </div>
+  </ng-container>
+
+  <app-footer class="mt-4 md:mt-8"></app-footer>
+
+  <ng-template #notAdmin>
+    <!-- <p>Non admin</p> -->
+  </ng-template>
+</div>

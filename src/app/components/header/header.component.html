@@ -59,9 +59,12 @@
       <button mat-icon-button class="relative group">
         <div class="absolute inset-0 bg-blue-400/30 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 ease-out"></div>
         <mat-icon
+          role="img"
           matBadge="3"
           matBadgeColor="warn"
-          class="text-white transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+          class="mat-icon notranslate mat-badge text-white transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12"
+          aria-hidden="false"
+          aria-label="Notifications">
           notifications
         </mat-icon>
         <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center border-2 border-white">3</span>

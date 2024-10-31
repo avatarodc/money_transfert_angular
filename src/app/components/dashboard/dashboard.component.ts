@@ -8,6 +8,9 @@ import { FooterComponent } from '../footer/footer.component';
 import { DashboardAdminComponent } from '../../admin/dashboard-admin/dashboard-admin.component';
 import { QrCodeComponent } from '../qr-code/qr-code.component';
 import { ApiService } from '../../services/api.service';
+import { TransactionComponent } from '../transaction/transaction.component';
+import { ContactsComponent } from '../contacts/contacts.component';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -17,10 +20,12 @@ import { ApiService } from '../../services/api.service';
     HeaderComponent,
     // BalanceCardComponent,
     QrCodeComponent,
+    ContactsComponent,
     DashboardAdminComponent,
     QuickActionsComponent,
     RecentTransactionsComponent,
-    FooterComponent
+    FooterComponent,
+    TransactionComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
