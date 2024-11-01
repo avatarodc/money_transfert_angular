@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.interface';
 import { Wallet } from '../models/wallet.model';
 import { TransferRequest, TransferResponse } from '../models/transfer.model';
 import { Balance } from '../models/balance.model';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,29 @@ import { Balance } from '../models/balance.model';
 export class WalletService extends ApiService {
   private readonly BASE_PATH = '/wallets';
   private readonly TRANSACTIONS_PATH = '/transactions';
+
+  constructor(
+    private userService: UserService
+  ) {
+    super(userService['http']);
+  }
+
+  getCurrentUserWallet(): Observable<ApiResponse<Wallet>> {
+    return this.userService.getCurrentUser().pipe(
+      map(response => {
+        console.log('Informations utilisateur complètes:', response.data);
+        if (response.data && response.data.wallets && response.data.wallets.length > 0) {
+          return {
+            success: true,
+            message: 'Wallet trouvé',
+            data: response.data.wallets[0],
+            status: 200
+          };
+        }
+        throw new Error('Aucun wallet trouvé');
+      })
+    );
+  }
 
   getUserWallet(): Observable<ApiResponse<Wallet>> {
     return this.get<Wallet>(`${this.BASE_PATH}/user`);

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,7 +26,7 @@ import { Observable, map } from 'rxjs';
 export class HeaderComponent implements OnInit {
   currentUser$ = new Observable<User | null>();
   dropdownOpen = false;
-  profileImage = 'assets/images/default-profile.png'; // ou l'URL de votre image par défaut
+  profileImage = '../../../assets/images/default-profile.png';
 
   constructor(
     private router: Router,
@@ -37,9 +37,7 @@ export class HeaderComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
-    // Plus besoin d'appeler getCurrentUser() ici car on utilise l'Observable du service
-  }
+  ngOnInit() {}
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;

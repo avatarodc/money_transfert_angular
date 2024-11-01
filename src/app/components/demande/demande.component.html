@@ -1,0 +1,18 @@
+<div class="max-w-6xl mx-auto">
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="flex justify-center items-center p-8">
+    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+  </div>
+
+  <!-- Content when loaded -->
+  <div *ngIf="!isLoading" class="p-4">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Faire une demande</h2>
+
+      <!-- Formulaire de demande ici -->
+      <form class="space-y-4">
+        <!-- Ajoutez vos champs de formulaire ici -->
+      </form>
+    </div>
+  </div>
+</div>
