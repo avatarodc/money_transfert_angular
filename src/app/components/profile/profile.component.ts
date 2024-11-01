@@ -1,3 +1,6 @@
+import { CommonModule } from '@angular/common';
+import { FooterComponent } from '../footer/footer.component';
+import { Component } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import {Router, RouterModule} from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -9,9 +12,14 @@ import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-profile',
-  standalone:true,
   templateUrl: './profile.component.html',
-  imports: [CommonModule, RouterModule, EditProfileComponent],
+  styleUrls: ['./profile.component.css'] ,
+  standalone: true,
+  imports: [
+    CommonModule,
+    FooterComponent,
+    RouterModule, EditProfileComponent
+  ]
 })
 export class ProfileComponent implements OnInit {
   user: User | null = null;

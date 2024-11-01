@@ -37,12 +37,12 @@ export class LoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: (response) => {
-        console.log('Réponse complète:', response);
-        console.log('Structure de la réponse:', {
-          hasData: !!response.data,
-          hasToken: !!response.data?.token,
-          userData: response.data?.user
-        });
+        // console.log('Réponse complète:', response);
+        // console.log('Structure de la réponse:', {
+        //   hasData: !!response.data,
+        //   hasToken: !!response.data?.token,
+        //   userData: response.data?.user
+        // });
 
         if (response.data?.token) {
           try {

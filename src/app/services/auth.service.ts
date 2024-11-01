@@ -36,7 +36,7 @@ export class AuthService extends ApiService {
       .pipe(
         tap({
           next: (response) => {
-            console.log('Réponse du serveur:', response);
+            // console.log('Réponse du serveur:', response);
             if (response.data?.token) {
               localStorage.setItem('token', response.data.token);
             }
@@ -52,4 +52,6 @@ export class AuthService extends ApiService {
   register(userData: UserData): Observable<ApiResponse<any>> {
     return this.post<any>('/register', userData);
   }
+
+
 }

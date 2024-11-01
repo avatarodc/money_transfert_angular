@@ -10,7 +10,7 @@ import { ApiService } from '../../services/api.service';
   imports: [
     CommonModule,
     RouterModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './footer.component.html',
   // styleUrls: ['./footer.component.scss']

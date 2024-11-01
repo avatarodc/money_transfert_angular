@@ -9,6 +9,9 @@ import { DashboardAdminComponent } from '../../admin/dashboard-admin/dashboard-a
 import { QrCodeComponent } from '../qr-code/qr-code.component';
 import {DemandeListComponent} from '../demande/demande-list.component';
 import { ApiService } from '../../services/api.service';
+import { TransactionComponent } from '../transaction/transaction.component';
+import { ContactsComponent } from '../contacts/contacts.component';
+
 import {ProfileComponent} from '../profile/profile.component';
 
 @Component({
@@ -19,9 +22,12 @@ import {ProfileComponent} from '../profile/profile.component';
     HeaderComponent,
     // BalanceCardComponent,
     QrCodeComponent,
+    ContactsComponent,
     DashboardAdminComponent,
     QuickActionsComponent,
     RecentTransactionsComponent,
+    FooterComponent,
+    TransactionComponent,
     DemandeListComponent,
     FooterComponent,
     ProfileComponent
