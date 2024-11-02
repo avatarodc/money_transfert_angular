@@ -96,18 +96,47 @@ export class ApiService {
   }
 
 
-    // Méthode PATCH ajoutée
-    protected patch<T>(endpoint: string, data: any, options?: HttpOptions): Observable<ApiResponse<T>> {
-      const fullUrl = `${this.baseUrl}${endpoint}`;
-      return this.http.patch<ApiResponse<T>>(
-        fullUrl,
-        data,
-        { ...this.defaultOptions, ...options }
-      ).pipe(
+  protected patch<T>(endpoint: string, data: any, options?: HttpOptions): Observable<ApiResponse<T>> {
+    const fullUrl = `${this.baseUrl}${endpoint}`;
+    let mergedOptions = this.mergeOptions(options);
+
+    if (data instanceof FormData) {
+        const headers = mergedOptions.headers ? mergedOptions.headers.delete('Content-Type') : new HttpHeaders();
+        mergedOptions = {
+            ...mergedOptions,
+            headers
+        };
+    }
+
+    return this.http.patch<ApiResponse<T>>(fullUrl, data, mergedOptions).pipe(
         tap(response => this.logResponse('PATCH', fullUrl, response)),
         catchError(error => this.handleError(error))
-      );
+    );
+}
+
+protected mergeOptions(options?: HttpOptions): HttpOptions {
+    const defaultOptions = this.defaultOptions;
+    if (!options) {
+        return defaultOptions;
     }
+
+    let mergedHeaders = this.getAuthHeaders();
+
+    if (options.headers) {
+        options.headers.keys().forEach(key => {
+            const value = options.headers?.get(key);
+            if (value) {
+                mergedHeaders = mergedHeaders.set(key, value);
+            }
+        });
+    }
+
+    return {
+        ...defaultOptions,
+        ...options,
+        headers: mergedHeaders,
+    };
+}
 
   public put<T>(endpoint: string, data: any, options?: HttpOptions): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
@@ -202,28 +231,28 @@ export class ApiService {
   }
 
   // Utilitaires privés
-  private mergeOptions(options?: HttpOptions): HttpOptions {
-    if (!options) {
-      return this.defaultOptions;
-    }
+  // private mergeOptions(options?: HttpOptions): HttpOptions {
+  //   if (!options) {
+  //     return this.defaultOptions;
+  //   }
 
-    let mergedHeaders = this.getAuthHeaders();
+  //   let mergedHeaders = this.getAuthHeaders();
 
-    if (options.headers) {
-      options.headers.keys().forEach(key => {
-        const value = options.headers?.get(key);
-        if (value) {
-          mergedHeaders = mergedHeaders.set(key, value);
-        }
-      });
-    }
+  //   if (options.headers) {
+  //     options.headers.keys().forEach(key => {
+  //       const value = options.headers?.get(key);
+  //       if (value) {
+  //         mergedHeaders = mergedHeaders.set(key, value);
+  //       }
+  //     });
+  //   }
 
-    return {
-      ...this.defaultOptions,
-      ...options,
-      headers: mergedHeaders,
-    };
-  }
+  //   return {
+  //     ...this.defaultOptions,
+  //     ...options,
+  //     headers: mergedHeaders,
+  //   };
+  // }
 
   private logResponse(method: string, url: string, response: any): void {
     if (!environment.production) {

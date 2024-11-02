@@ -62,7 +62,7 @@
               type="number"
               formControlName="amount"
               class="block w-full pl-8 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-              placeholder="0.00"
+              placeholder="montant en FCFA"
               step="0.01"
             >
           </div>
@@ -102,6 +102,25 @@
           </button>
         </div>
       </form>
+
+      <!-- Message de confirmation -->
+      <div *ngIf="successfulTransaction" class="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div class="flex items-center mb-3">
+          <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <h3 class="text-lg font-semibold text-green-800">Transaction réussie !</h3>
+        </div>
+        <div class="space-y-2 text-sm text-green-700">
+          <p><span class="font-medium">Destinataire :</span> {{successfulTransaction.recipient}}</p>
+          <p><span class="font-medium">Montant :</span> {{successfulTransaction.amount}} FCFA</p>
+          <p *ngIf="successfulTransaction.description">
+            <span class="font-medium">Description :</span> {{successfulTransaction.description}}
+          </p>
+          <p><span class="font-medium">Date :</span> {{successfulTransaction.createdAt | date:'dd/MM/yyyy HH:mm'}}</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

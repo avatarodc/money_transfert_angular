@@ -24,6 +24,7 @@ export class TransactionComponent implements OnInit {
   transactionForm: FormGroup;
   isLoading = false;
   selectedUser: any = null;
+  successfulTransaction: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -72,6 +73,12 @@ export class TransactionComponent implements OnInit {
       this.transactionService.createTransfer(transferData).subscribe({
         next: (response) => {
           console.log('Transaction réussie:', response);
+          this.successfulTransaction = {
+            recipient: this.selectedUser?.phoneNumber,
+            amount: transferData.amount,
+            description: this.transactionForm.get('description')?.value,
+            createdAt: new Date()
+          };
           this.transactionForm.reset();
         },
         error: (error) => {

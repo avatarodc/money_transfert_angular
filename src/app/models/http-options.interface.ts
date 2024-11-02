@@ -4,4 +4,5 @@ export interface HttpOptions {
   headers?: HttpHeaders;
   params?: HttpParams;
   withCredentials?: boolean;
+  reportProgress?: boolean;
 }

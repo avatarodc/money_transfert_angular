@@ -7,6 +7,7 @@ import { UserRole } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import {BehaviorSubject, firstValueFrom} from 'rxjs';
 import { Router } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { Router } from '@angular/router';
     CommonModule,
     FooterComponent,
     EditProfileComponent,
+    ReactiveFormsModule
   ]
 })
 
