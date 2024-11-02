@@ -56,6 +56,7 @@ export class EditProfileComponent {
   }
 
 
+
 // async onSubmit() {
 
 //   // console.log('azerty')
@@ -105,6 +106,7 @@ export class EditProfileComponent {
 
 // }
 
+
 async onSubmit() {
   if (!this.profileForm.valid) {
       console.log('Form invalid:', this.profileForm.errors);
@@ -137,6 +139,13 @@ async onSubmit() {
           console.log(`Adding field ${field}:`, value); // Log chaque champ
       }
   });
+
+  // Ajouter la photo si présente
+  const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+  if (fileInput?.files?.[0]) {
+      formData.append('photo', fileInput.files[0]);
+      console.log('Adding photo to FormData:', fileInput.files[0]);
+  }
 
   // Log du FormData
   formData.forEach((value, key) => {
