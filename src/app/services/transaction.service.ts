@@ -8,7 +8,7 @@ import { Transaction } from '../models/transaction.model';
   providedIn: 'root'
 })
 export class TransactionService extends ApiService {
-  private readonly BASE_PATH = '/transactions';
+  private readonly BASE_PATH = '/transaction';
 
   // Récupérer toutes les transactions (admin uniquement)
   getAllTransactions(): Observable<ApiResponse<Transaction[]>> {
@@ -45,9 +45,10 @@ export class TransactionService extends ApiService {
 
   // Créer un transfert (clients, agents, et admins)
   createTransfer(data: {
-    receiverId: string;
+    senderWalletId: string;
+    receiverWalletId: string;
     amount: number;
-    description?: string;
+    currency: string;
   }): Observable<ApiResponse<Transaction>> {
     return this.post<Transaction>(`${this.BASE_PATH}/transfer`, data);
   }

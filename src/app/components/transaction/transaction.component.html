@@ -15,6 +15,7 @@
 
   <!-- Composant Contacts avec écouteur d'événement -->
   <app-contacts (userSelected)="onUserSelected($event)"></app-contacts>
+
   <!-- Contenu principal -->
   <div class="max-w-2xl mx-auto">
     <div class="bg-white/80 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 border border-blue-100">
@@ -45,7 +46,7 @@
               type="text"
               formControlName="recipient"
               class="block w-full pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-              placeholder="Numéro de téléphone ou email"
+              placeholder="Numéro de téléphone "
             >
           </div>
         </div>

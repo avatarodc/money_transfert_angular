@@ -6,6 +6,8 @@ import { ApiService } from '../../services/api.service';
 import { FooterComponent } from '../footer/footer.component';
 import { ContactsComponent } from '../contacts/contacts.component';
 import { User } from '../../models/user.model';
+import { TransactionService } from '../../services/transaction.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-transaction',
@@ -21,32 +23,64 @@ import { User } from '../../models/user.model';
 export class TransactionComponent implements OnInit {
   transactionForm: FormGroup;
   isLoading = false;
+  selectedUser: any = null;
 
   constructor(
     private fb: FormBuilder,
+    private transactionService: TransactionService,
+    private userService: UserService,
     public apiService: ApiService
   ) {
     this.transactionForm = this.fb.group({
-      recipient: ['', [Validators.required]],
-      amount: ['', [Validators.required, Validators.min(0.01)]],
-      description: [''],
+      recipient: ['', Validators.required],
+      senderWalletId: ['', Validators.required],
+      receiverWalletId: ['', Validators.required],
+      amount: ['', [Validators.required, Validators.min(0)]]
+    });
+
+    this.userService.getCurrentUser().subscribe(response => {
+      const currentUser = response.data;
+      if (currentUser && currentUser.wallets && currentUser.wallets.length > 0) {
+        this.transactionForm.patchValue({
+          senderWalletId: currentUser.wallets[0].id
+        });
+      }
     });
   }
 
   ngOnInit(): void {}
 
-  onUserSelected(user: User) {
-    // Mettre à jour le champ recipient avec le numéro de téléphone de l'utilisateur sélectionné
+  onUserSelected(user: any) {
+    this.selectedUser = user;
     this.transactionForm.patchValue({
-      recipient: user.phoneNumber
+      recipient: user.phoneNumber,
+      receiverWalletId: user.wallets?.[0]?.id
     });
   }
 
   onSubmit() {
     if (this.transactionForm.valid) {
       this.isLoading = true;
-      console.log(this.transactionForm.value);
-      setTimeout(() => this.isLoading = false, 1500);
+
+      const transferData = {
+        senderWalletId: this.transactionForm.get('senderWalletId')?.value,
+        receiverWalletId: this.transactionForm.get('receiverWalletId')?.value,
+        amount: Number(this.transactionForm.get('amount')?.value),
+        currency: 'FCFA'
+      };
+
+      this.transactionService.createTransfer(transferData).subscribe({
+        next: (response) => {
+          console.log('Transaction réussie:', response);
+          this.transactionForm.reset();
+        },
+        error: (error) => {
+          console.error('Erreur lors de la transaction:', error);
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      });
     }
   }
 }
