@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
-import { Component } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import {Router, RouterModule} from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -8,12 +7,10 @@ import {User, UserRole} from '../../models/user.model';
 import {BehaviorSubject, firstValueFrom} from 'rxjs';
 import {ApiResponse} from '../../models/api-response.interface';
 import {EditProfileComponent} from './edit-profile.component';
-import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'] ,
   standalone: true,
   imports: [
     CommonModule,

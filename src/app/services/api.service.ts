@@ -9,16 +9,16 @@ import { UserRole } from '../models/user-role.enum';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ApiService {
   protected baseUrl = environment.apiUrl; // Utiliser l'URL complète du backend
 
   protected defaultOptions: HttpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     }),
-    withCredentials: true,
+    withCredentials: true
   };
 
   private jwtHelper = new JwtHelperService();
@@ -28,8 +28,8 @@ export class ApiService {
     this.initializeUserRole();
   }
 
-  private initializeUserRole(): void {
-    const token = localStorage.getItem('token'); // ou votre clé de stockage du token
+  protected initializeUserRole(): void {
+    const token = localStorage.getItem('accessToken'); // ou votre clé de stockage du token
     if (token) {
       try {
         const decodedToken = this.jwtHelper.decodeToken(token);
@@ -41,64 +41,50 @@ export class ApiService {
     }
   }
 
-  public get<T>(
-    endpoint: string,
-    options?: HttpOptions
-  ): Observable<ApiResponse<T>> {
+  public get<T>(endpoint: string, options?: HttpOptions): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
-    return this.http
-      .get<ApiResponse<T>>(fullUrl, { ...this.defaultOptions, ...options })
-      .pipe(
-        tap((response) => this.logResponse('GET', fullUrl, response)),
-        catchError((error) => this.handleError(error))
-      );
+    return this.http.get<ApiResponse<T>>(
+      fullUrl,
+      { ...this.defaultOptions, ...options }
+    ).pipe(
+      tap(response => this.logResponse('GET', fullUrl, response)),
+      catchError(error => this.handleError(error))
+    );
   }
 
-  protected post<T>(
-    endpoint: string,
-    data: any,
-    options?: HttpOptions
-  ): Observable<ApiResponse<T>> {
+  protected post<T>(endpoint: string, data: any, options?: HttpOptions): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
-    return this.http
-      .post<ApiResponse<T>>(fullUrl, data, {
-        ...this.defaultOptions,
-        ...options,
-      })
-      .pipe(
-        tap((response) => this.logResponse('POST', fullUrl, response)),
-        catchError((error) => this.handleError(error))
-      );
+    return this.http.post<ApiResponse<T>>(
+      fullUrl,
+      data,
+      { ...this.defaultOptions, ...options }
+    ).pipe(
+      tap(response => this.logResponse('POST', fullUrl, response)),
+      catchError(error => this.handleError(error))
+    );
   }
 
-  protected put<T>(
-    endpoint: string,
-    data: any,
-    options?: HttpOptions
-  ): Observable<ApiResponse<T>> {
+  protected put<T>(endpoint: string, data: any, options?: HttpOptions): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
-    return this.http
-      .put<ApiResponse<T>>(fullUrl, data, {
-        ...this.defaultOptions,
-        ...options,
-      })
-      .pipe(
-        tap((response) => this.logResponse('PUT', fullUrl, response)),
-        catchError((error) => this.handleError(error))
-      );
+    return this.http.put<ApiResponse<T>>(
+      fullUrl,
+      data,
+      { ...this.defaultOptions, ...options }
+    ).pipe(
+      tap(response => this.logResponse('PUT', fullUrl, response)),
+      catchError(error => this.handleError(error))
+    );
   }
 
-  protected delete<T>(
-    endpoint: string,
-    options?: HttpOptions
-  ): Observable<ApiResponse<T>> {
+  protected delete<T>(endpoint: string, options?: HttpOptions): Observable<ApiResponse<T>> {
     const fullUrl = `${this.baseUrl}${endpoint}`;
-    return this.http
-      .delete<ApiResponse<T>>(fullUrl, { ...this.defaultOptions, ...options })
-      .pipe(
-        tap((response) => this.logResponse('DELETE', fullUrl, response)),
-        catchError((error) => this.handleError(error))
-      );
+    return this.http.delete<ApiResponse<T>>(
+      fullUrl,
+      { ...this.defaultOptions, ...options }
+    ).pipe(
+      tap(response => this.logResponse('DELETE', fullUrl, response)),
+      catchError(error => this.handleError(error))
+    );
   }
 
   // Méthode PATCH ajoutée
@@ -126,11 +112,11 @@ export class ApiService {
       console.error('Erreur client:', error.error.message);
     } else {
       // Erreur côté serveur
-      console.error("Détails de l'erreur:", {
+      console.error('Détails de l\'erreur:', {
         status: error.status,
         body: error.error,
         url: error.url,
-        headers: error.headers,
+        headers: error.headers
       });
     }
     return throwError(() => error);
@@ -145,21 +131,16 @@ export class ApiService {
   }
 
   public isAdmin(): boolean {
-    const token = localStorage.getItem('token');
-    if (!token) return false;
+    return this.currentUserRole === UserRole.ADMIN;  // Déjà correct
 
-    try {
-      const decodedToken = this.jwtHelper.decodeToken(token);
-      // console.log('Token décodé:', decodedToken); // Pour déboguer
-      return decodedToken.role === 'ADMIN';
-    } catch (error) {
-      console.error('Erreur de décodage du token:', error);
-      return false;
-    }
   }
 
   public isClient(): boolean {
     // console.log('currentUserRole', this.currentUserRole);
-    return this.currentUserRole === UserRole.USER; // Déjà correct
-  }
+    return this.currentUserRole === UserRole.USER;  // Déjà correct
+}
+public  isAgent(): boolean {
+    // console.log('currentUserRole', this.currentUserRole);
+    return this.currentUserRole === UserRole.AGENT;  // Déjà correct
+}
 }

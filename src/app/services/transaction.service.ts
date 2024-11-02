@@ -8,7 +8,7 @@ import { Transaction } from '../models/transaction.model';
   providedIn: 'root'
 })
 export class TransactionService extends ApiService {
-  private readonly BASE_PATH = '/transactions';
+  private readonly BASE_PATH = '/transaction';
 
   // Récupérer toutes les transactions (admin uniquement)
   getAllTransactions(): Observable<ApiResponse<Transaction[]>> {

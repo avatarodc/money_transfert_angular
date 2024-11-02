@@ -28,25 +28,12 @@ export class UserService extends ApiService {
 
   // Récupérer l'utilisateur connecté
   getCurrentUser(): Observable<ApiResponse<User>> {
-    const token = localStorage.getItem('token');
-    // console.log('Token from localStorage:', token); // Debug
 
-    if (!token) {
-      return throwError(() => new Error('No token found'));
-    }
 
     try {
-      const decodedToken = jwtDecode(token) as any;
-      // console.log('Decoded token:', decodedToken); // Debug
-      const userId = decodedToken.userId;
-      // console.log('User ID extracted:', userId); // Debug
 
       // Utiliser l'ID spécifique de l'utilisateur
-      return this.get<User>(`/users/${userId}`, {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${token}`
-        })
-      }).pipe(
+      return this.get<User>(`${this.BASE_PATH}/me/moi`).pipe(
         tap(response => console.log('API Response:', response)),
         catchError(error => {
           console.error('API Error:', error);
