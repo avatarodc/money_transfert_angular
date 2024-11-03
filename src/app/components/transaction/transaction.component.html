@@ -4,7 +4,7 @@
     <div class="text-center">
       <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold">
         <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 animate-gradient">
-          Transfert
+          {{apiService.isAdmin() ? 'Gestion des Transactions' : 'Transfert'}}
         </span>
       </h1>
       <div class="mt-2 sm:mt-3">
@@ -13,94 +13,324 @@
     </div>
   </div>
 
-  <!-- Composant Contacts avec écouteur d'événement -->
+  <!-- Statistiques pour Admin -->
+  <div *ngIf="apiService.isAdmin() && transactionStats" class="max-w-4xl mx-auto mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-white rounded-xl shadow-md p-4">
+      <h3 class="text-gray-500 text-sm">Total des Transactions</h3>
+      <p class="text-2xl font-bold">{{transactionStats.totalTransactions}}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-md p-4">
+      <h3 class="text-gray-500 text-sm">Montant Total</h3>
+      <p class="text-2xl font-bold">{{formatAmount(transactionStats.totalAmount)}}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-md p-4">
+      <h3 class="text-gray-500 text-sm">Frais Totaux</h3>
+      <p class="text-2xl font-bold">{{formatAmount(transactionStats.totalFees)}}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-md p-4">
+      <button
+        (click)="togglePendingTransactions()"
+        class="text-blue-600 hover:text-blue-800 font-medium"
+      >
+        Transactions en attente ({{pendingTransactions.length}})
+      </button>
+    </div>
+  </div>
+
+
+<!-- Sélecteur de type de transaction pour Admin -->
+<div *ngIf="apiService.isAdmin()" class="max-w-4xl mx-auto mb-8">
+  <div class="flex justify-center gap-4 p-4">
+    <button
+      *ngIf="apiService.isAgent()"
+      (click)="transactionType = 'transfer'"
+      [class.bg-gradient-to-r]="transactionType === 'transfer'"
+      [class.from-blue-600]="transactionType === 'transfer'"
+      [class.to-indigo-600]="transactionType === 'transfer'"
+      [class.text-white]="transactionType === 'transfer'"
+      [class.shadow-lg]="transactionType === 'transfer'"
+      [class.transform]="transactionType === 'transfer'"
+      [class.scale-105]="transactionType === 'transfer'"
+      class="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ease-in-out
+             hover:shadow-md hover:scale-105
+             bg-white border-2 border-blue-600 text-blue-600
+             hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m-4 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+      Transfert Standard
+    </button>
+
+    <button
+      *ngIf="apiService.isAgent()"
+      (click)="transactionType = 'admin-transfer'"
+      [class.bg-gradient-to-r]="transactionType === 'admin-transfer'"
+      [class.from-purple-600]="transactionType === 'admin-transfer'"
+      [class.to-pink-600]="transactionType === 'admin-transfer'"
+      [class.text-white]="transactionType === 'admin-transfer'"
+      [class.shadow-lg]="transactionType === 'admin-transfer'"
+      [class.transform]="transactionType === 'admin-transfer'"
+      [class.scale-105]="transactionType === 'admin-transfer'"
+      class="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ease-in-out
+             hover:shadow-md hover:scale-105
+             bg-white border-2 border-purple-600 text-purple-600
+             hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:text-white"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+      </svg>
+      Transfert Admin
+    </button>
+
+<button
+  (click)="transactionType = 'balance'"
+  [class.bg-gradient-to-br]="transactionType === 'balance'"
+  [class.from-indigo-600]="transactionType === 'balance'"
+  [class.via-blue-500]="transactionType === 'balance'"
+  [class.to-purple-500]="transactionType === 'balance'"
+  [class.text-white]="transactionType === 'balance'"
+  [class.shadow-lg]="transactionType === 'balance'"
+  [class.transform]="transactionType === 'balance'"
+  [class.scale-105]="transactionType === 'balance'"
+  [class.ring-4]="transactionType === 'balance'"
+  [class.ring-indigo-200]="transactionType === 'balance'"
+  class="flex items-center gap-3 px-8 py-4 rounded-2xl font-bold text-lg
+         transition-all duration-500 ease-out
+         hover:shadow-xl hover:scale-105 group
+         bg-white border-2 border-indigo-500 text-indigo-600
+         hover:bg-gradient-to-br hover:from-indigo-600 hover:via-blue-500 hover:to-purple-500 hover:text-white
+         hover:border-transparent hover:ring-4 hover:ring-indigo-200"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6 transform group-hover:rotate-12 transition-transform duration-300"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+  <span class="group-hover:translate-x-1 transition-transform duration-300">
+    Ajout de Solde
+  </span>
+</button>
+
+
+  </div>
+</div>
+
+
+
+
+
+  <!-- Liste des transactions en attente -->
+  <div *ngIf="showPendingTransactions && apiService.isAdmin()" class="max-w-4xl mx-auto mb-8">
+    <div class="bg-white rounded-xl shadow-md p-4">
+      <h3 class="text-lg font-semibold mb-4">Transactions en attente</h3>
+      <div class="space-y-4">
+        <div *ngFor="let transaction of pendingTransactions" class="border-b pb-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-medium">{{formatAmount(transaction.amount)}}</p>
+              <p class="text-sm text-gray-500">De: {{transaction.senderWalletId}}</p>
+              <p class="text-sm text-gray-500">À: {{transaction.receiverWalletId}}</p>
+            </div>
+            <div class="flex space-x-2">
+              <button
+                (click)="approveTransaction(transaction.id)"
+                class="px-3 py-1 bg-green-100 text-green-700 rounded-lg hover:bg-green-200"
+              >
+                Approuver
+              </button>
+              <button
+                (click)="rejectTransaction(transaction.id)"
+                class="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
+              >
+                Rejeter
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Composant Contacts -->
   <app-contacts (userSelected)="onUserSelected($event)"></app-contacts>
 
-  <!-- Contenu principal -->
+
+<!-- Contenu principal -->
   <div class="max-w-2xl mx-auto">
-    <div class="bg-white/80 backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 border border-blue-100">
+    <div class="bg-white/80 backdrop-blur-lg rounded-xl shadow-lg p-4 sm:p-6 md:p-8 border border-blue-100">
       <!-- En-tête -->
-      <div class="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full p-2 sm:p-3">
-          <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full p-3">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
         </div>
-        <h2 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-          Nouvelle Transaction
+        <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          {{transactionType === 'balance' ? 'Ajout de Solde' : 'Nouvelle Transaction'}}
         </h2>
       </div>
 
-      <!-- Formulaire -->
-      <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="space-y-4 sm:space-y-6">
-        <!-- Destinataire -->
-        <div class="space-y-1.5 sm:space-y-2">
-          <label class="block text-sm sm:text-base font-medium text-gray-700">Destinataire</label>
+      <!-- Formulaire de transfert standard -->
+      <!--
+      <form *ngIf="transactionType === 'transfer'" [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Destinataire</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
             <input
               type="text"
               formControlName="recipient"
-              class="block w-full pl-10 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-              placeholder="Numéro de téléphone "
+              class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              placeholder="Numéro de téléphone ou identifiant"
             >
           </div>
         </div>
 
-        <!-- Montant -->
-        <div class="space-y-1.5 sm:space-y-2">
-          <label class="block text-sm sm:text-base font-medium text-gray-700">Montant</label>
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Montant</label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <span class="text-sm sm:text-base text-gray-500">€</span>
+              <span class="text-gray-500">FCFA</span>
             </div>
             <input
               type="number"
               formControlName="amount"
-              class="block w-full pl-8 pr-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-              placeholder="montant en FCFA"
-              step="0.01"
+              class="block w-full pl-16 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              placeholder="Montant"
+              min="0"
             >
           </div>
         </div>
 
-        <!-- Description -->
-        <div class="space-y-1.5 sm:space-y-2">
-          <label class="block text-sm sm:text-base font-medium text-gray-700">Description (optionnel)</label>
+        <button
+          type="submit"
+          [disabled]="!transactionForm.valid || isLoading"
+          class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+        >
+          <span *ngIf="!isLoading">Envoyer</span>
+          <div *ngIf="isLoading" class="flex items-center">
+            <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Chargement...
+          </div>
+        </button>
+      </form>
+      -->
+
+<!-- Formulaire de transfert admin -->
+      <form *ngIf="transactionType === 'admin-transfer' && apiService.isAgent()" [formGroup]="adminTransferForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">ID Wallet Destinataire</label>
+          <div class="relative">
+            <input
+              type="text"
+              formControlName="receiverWalletId"
+              class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              placeholder="ID du wallet destinataire"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Montant</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span class="text-gray-500">FCFA</span>
+            </div>
+            <input
+              type="number"
+              formControlName="amount"
+              class="block w-full pl-16 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              placeholder="Montant"
+              min="0"
+            >
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Description</label>
           <textarea
             formControlName="description"
             rows="3"
-            class="block w-full px-3 py-2 sm:py-2.5 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
-            placeholder="Ajoutez une note à votre transaction..."
+            class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+            placeholder="Description de la transaction..."
           ></textarea>
         </div>
 
-        <!-- Bouton de soumission -->
-        <div class="pt-2 sm:pt-4">
-          <button
-            type="submit"
-            [disabled]="!transactionForm.valid || isLoading"
-            class="w-full flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 border border-transparent rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
-          >
-            <ng-container *ngIf="!isLoading">
-              <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Envoyer
-            </ng-container>
-            <div *ngIf="isLoading" class="flex items-center">
-              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Chargement...
+        <button
+          type="submit"
+          [disabled]="!adminTransferForm.valid || isLoading"
+          class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+        >
+          <span *ngIf="!isLoading">Effectuer le transfert administratif</span>
+          <div *ngIf="isLoading" class="flex items-center">
+            <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Chargement...
+          </div>
+        </button>
+      </form>
+
+      <!-- Formulaire d'ajout de solde -->
+      <form *ngIf="transactionType === 'balance'" [formGroup]="balanceForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Montant à ajouter</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <span class="text-gray-500">FCFA</span>
             </div>
-          </button>
+            <input
+              type="number"
+              formControlName="amount"
+              class="block w-full pl-16 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              placeholder="Montant à ajouter"
+              min="0"
+            >
+          </div>
         </div>
+
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Description</label>
+          <textarea
+            formControlName="description"
+            rows="3"
+            class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
+            placeholder="Raison de l'ajout de solde..."
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="!balanceForm.valid || isLoading"
+          class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-lg text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+        >
+          <span *ngIf="!isLoading">Ajouter le solde</span>
+          <div *ngIf="isLoading" class="flex items-center">
+            <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Chargement...
+          </div>
+        </button>
       </form>
 
       <!-- Message de confirmation -->
@@ -109,11 +339,11 @@
           <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
           </svg>
-          <h3 class="text-lg font-semibold text-green-800">Transaction réussie !</h3>
+          <h3 class="text-lg font-semibold text-green-800">{{successfulTransaction.type}} réussi !</h3>
         </div>
         <div class="space-y-2 text-sm text-green-700">
           <p><span class="font-medium">Destinataire :</span> {{successfulTransaction.recipient}}</p>
-          <p><span class="font-medium">Montant :</span> {{successfulTransaction.amount}} FCFA</p>
+          <p><span class="font-medium">Montant :</span> {{formatAmount(successfulTransaction.amount)}}</p>
           <p *ngIf="successfulTransaction.description">
             <span class="font-medium">Description :</span> {{successfulTransaction.description}}
           </p>
@@ -124,23 +354,8 @@
     </div>
   </div>
 </div>
-<app-footer *ngIf="apiService.isClient()"></app-footer>
 
-<!-- Ajoutez ces styles dans votre fichier CSS -->
-<style>
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient 6s ease infinite;
-}
-</style>
+<app-footer *ngIf="apiService.isClient()"></app-footer>
+<app-footer *ngIf="apiService.isAdmin()"></app-footer>
+
+

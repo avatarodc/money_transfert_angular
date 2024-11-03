@@ -39,17 +39,15 @@
     </ng-container>
 
     <ng-container *ngIf="apiService.isAdmin(); else notAdmin">
-      <div class="flex flex-col lg:grid lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6">
+
+      <!-- <div class="flex flex-col lg:grid lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6 items-center justify-center"> -->
         <!-- Colonne transactions récentes -->
-        <div class="w-full lg:col-span-1 order-2 lg:order-1">
-          <app-recent-transactions class="block bg-white rounded-lg shadow-sm"></app-recent-transactions>
-        </div>
+        <!-- <app-recent-transactions class="block bg-white rounded-lg shadow-sm w-full"></app-recent-transactions> -->
+
 
         <!-- Dashboard admin principal -->
-        <div class="w-full lg:col-span-2 order-1 lg:order-2">
-          <app-dashboard-admin class="block bg-white rounded-lg shadow-sm"></app-dashboard-admin>
-        </div>
-      </div>
+          <app-dashboard-admin class="block bg-white rounded-lg shadow-sm w-full"></app-dashboard-admin>
+      <!-- </div> -->
     </ng-container>
   </ng-container>
 

@@ -42,23 +42,32 @@ export class DemandeComponent {
       return;
     }
 
+    if (!this.demande.firstName || !this.demande.lastName || !this.demande.email || !this.demande.phoneNumber) {
+      this.errorMessage = 'Veuillez remplir tous les champs obligatoires';
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('firstName', this.demande.firstName || '');
-    formData.append('lastName', this.demande.lastName || '');
-    formData.append('phoneNumber', this.demande.phoneNumber || '');
-    formData.append('email', this.demande.email || '');
-    formData.append('idCardFrontPhoto', this.idCardFrontFile);
-    formData.append('idCardBackPhoto', this.idCardBackFile);
+    formData.append('firstName', this.demande.firstName);
+    formData.append('lastName', this.demande.lastName);
+    formData.append('phoneNumber', this.demande.phoneNumber);
+    formData.append('email', this.demande.email);
+    formData.append('idCardFrontPhoto', this.idCardFrontFile, this.idCardFrontFile.name);
+    formData.append('idCardBackPhoto', this.idCardBackFile, this.idCardBackFile.name);
+    formData.append('status', AccountRequestStatus.PENDING.toString());
 
     this.demandeService.createDemande(formData).subscribe({
       next: (response) => {
         console.log('Demande soumise avec succès', response);
-        // Rediriger vers une page de confirmation
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        console.error('Erreur lors de la soumission de la demande', error);
-        this.errorMessage = 'Erreur lors de la soumission de la demande. Veuillez réessayer.';
+        console.error('Erreur détaillée:', error);
+        if (error.error?.error === 'cloud_name is disabled') {
+          this.errorMessage = 'Erreur de configuration du service de stockage d\'images. Veuillez contacter l\'administrateur.';
+        } else {
+          this.errorMessage = `Erreur: ${error.error?.error || 'Une erreur est survenue'}`;
+        }
       }
     });
   }

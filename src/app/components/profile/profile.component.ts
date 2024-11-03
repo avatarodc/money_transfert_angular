@@ -37,7 +37,8 @@ export class ProfileComponent implements OnInit {
     // Récupère l'utilisateur courant via le service
     try {
       const userResponse = await firstValueFrom(this.userService.getCurrentUser());
-      this.user = userResponse.data; // Extrayez l'utilisateur de `data`
+      this.user = userResponse.data;
+      console.log("this.user", this.user);
     } catch (error) {
       console.error('Erreur lors de la récupération de l’utilisateur:', error);
       // Gérer l'erreur de récupération, comme rediriger vers la page de connexion

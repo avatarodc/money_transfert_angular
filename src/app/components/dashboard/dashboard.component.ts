@@ -11,6 +11,7 @@ import { ApiService } from '../../services/api.service';
 import { TransactionComponent } from '../transaction/transaction.component';
 import { ContactsComponent } from '../contacts/contacts.component';
 import { LoadingService } from '../../services/loading.service';
+import { DemandeListComponent } from '../demande/demande.component';
 
 
 @Component({
@@ -26,7 +27,7 @@ import { LoadingService } from '../../services/loading.service';
     QuickActionsComponent,
     RecentTransactionsComponent,
     FooterComponent,
-    TransactionComponent
+    TransactionComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']

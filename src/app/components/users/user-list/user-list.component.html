@@ -1,0 +1,267 @@
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-2 sm:p-4 md:p-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl overflow-hidden border border-gray-100">
+      <div class="p-4 sm:p-6 md:p-8">
+        <!-- En-tête responsive -->
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 space-y-4 lg:space-y-0">
+          <div>
+             <div class="relative">
+              <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold">
+                <span class="bg-gradient-to-r from-violet-600 via-violet-500 to-purple-500 bg-clip-text text-transparent
+                           animate-gradient-x relative inline-block">
+                  Liste des utilisateurs
+                </span>
+                <!-- Badge décoratif -->
+                <span class="absolute -top-2 -right-2 bg-violet-100 text-violet-600 text-xs font-semibold px-2 py-1 rounded-full">
+                  Utilisateurs
+                </span>
+              </h2>
+              </div>
+            <p class="mt-2 text-sm md:text-base text-gray-500">
+              Affichage de {{ getStartIndex() }} à {{ getEndIndex() }} sur {{ totalItems }} utilisateurs
+            </p>
+          </div>
+
+          <!-- Barre de recherche responsive -->
+          <div class="w-full lg:w-auto">
+            <div class="relative">
+              <input type="text"
+                     [(ngModel)]="searchTerm"
+                     (ngModelChange)="searchUsers()"
+                     placeholder="Rechercher un utilisateur..."
+                     class="w-full px-4 py-2 pr-10 text-sm md:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute right-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loader -->
+        <div *ngIf="isLoading" class="flex justify-center items-center py-20">
+          <img src="assets/images/logo.svg"
+               class="animate-spin h-16 w-16"
+               alt="Chargement...">
+        </div>
+
+        <!-- Content container -->
+        <div *ngIf="!isLoading" class="space-y-6">
+          <!-- Version mobile (cards) -->
+          <div class="md:hidden space-y-4">
+            <div *ngFor="let user of filteredUsers"
+                 class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 space-y-3">
+              <!-- En-tête utilisateur -->
+              <div class="flex items-center space-x-3">
+                <div class="h-10 w-10 rounded-full bg-violet-100 flex items-center justify-center">
+                  <span class="text-violet-600 font-medium text-sm">
+                    {{user.firstName.charAt(0)}}{{user.lastName.charAt(0)}}
+                  </span>
+                </div>
+                <div>
+                  <div class="font-medium">{{user.firstName}} {{user.lastName}}</div>
+                  <div class="text-sm text-gray-500">{{user.email}}</div>
+                </div>
+              </div>
+
+              <!-- Informations -->
+              <div class="space-y-2">
+                <div class="flex justify-between text-sm">
+                  <span class="text-gray-500">Téléphone:</span>
+                  <span>{{user.phoneNumber}}</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Statut:</span>
+                  <span class="px-2 py-1 text-xs font-semibold rounded-full"
+                        [ngClass]="{
+                          'bg-green-100 text-green-800': user.isActive,
+                          'bg-red-100 text-red-800': !user.isActive
+                        }">
+                    {{user.isActive ? 'Actif' : 'Inactif'}}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="flex justify-end space-x-3 pt-2 border-t">
+                <!-- Actions désactivées temporairement
+                <button (click)="editUser(user)"
+                        class="text-sm text-violet-600 hover:text-violet-900 transition-colors">
+                  Modifier
+                </button>
+                <button (click)="toggleUserStatus(user)"
+                        class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                  {{user.isActive ? 'Désactiver' : 'Activer'}}
+                </button>
+                -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Version desktop (table) -->
+          <div class="hidden md:block overflow-x-auto -mx-4 sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full align-middle">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50/50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Utilisateur
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Téléphone
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Statut
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr *ngFor="let user of filteredUsers" class="hover:bg-gray-50/50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div class="h-10 w-10 flex-shrink-0">
+                          <div class="h-10 w-10 rounded-full bg-violet-100 flex items-center justify-center">
+                            <span class="text-violet-600 font-medium text-sm">
+                              {{user.firstName.charAt(0)}}{{user.lastName.charAt(0)}}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="ml-4">
+                          <div class="text-sm font-medium text-gray-900">
+                            {{user.firstName}} {{user.lastName}}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">{{user.email}}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">{{user.phoneNumber}}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                            [ngClass]="{
+                              'bg-green-100 text-green-800': user.isActive,
+                              'bg-red-100 text-red-800': !user.isActive
+                            }">
+                        {{user.isActive ? 'Actif' : 'Inactif'}}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <!-- Actions désactivées temporairement
+                      <div class="flex space-x-3">
+                        <button (click)="editUser(user)"
+                                class="text-violet-600 hover:text-violet-900 transition-colors">
+                          Modifier
+                        </button>
+                        <button (click)="toggleUserStatus(user)"
+                                class="text-gray-600 hover:text-gray-900 transition-colors">
+                          {{user.isActive ? 'Désactiver' : 'Activer'}}
+                        </button>
+                      </div>
+                      -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="mt-6 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <div class="text-sm text-gray-700">
+              <span class="font-medium">{{ getStartIndex() }}</span>
+              <span> à </span>
+              <span class="font-medium">{{ getEndIndex() }}</span>
+              <span> sur </span>
+              <span class="font-medium">{{ totalItems }}</span>
+              <span> utilisateurs</span>
+            </div>
+
+            <div class="flex justify-center space-x-2">
+              <button (click)="goToPage(currentPage - 1)"
+                      [disabled]="currentPage === 1"
+                      class="relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                      [ngClass]="currentPage === 1 ? 'text-gray-400 bg-gray-50' : 'text-gray-700 bg-white hover:bg-gray-50'">
+                <span>Précédent</span>
+              </button>
+
+              <div class="hidden md:flex space-x-2">
+                <ng-container *ngFor="let page of pages">
+                  <button (click)="goToPage(page)"
+                          class="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md"
+                          [ngClass]="page === currentPage ? 'z-10 bg-violet-600 text-white' : 'text-gray-700 bg-white hover:bg-gray-50'">
+                    {{ page }}
+                  </button>
+                </ng-container>
+              </div>
+
+              <button (click)="goToPage(currentPage + 1)"
+                      [disabled]="currentPage === totalPages"
+                      class="relative inline-flex items-center px-3 py-2 text-sm font-medium rounded-md"
+                      [ngClass]="currentPage === totalPages ? 'text-gray-400 bg-gray-50' : 'text-gray-700 bg-white hover:bg-gray-50'">
+                <span>Suivant</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message si aucun utilisateur -->
+        <div *ngIf="!isLoading && filteredUsers.length === 0" class="text-center py-20">
+          <p class="text-gray-500">Aucun utilisateur trouvé</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
+
+
+<!-- Styles pour les animations -->
+<style>
+  @keyframes gradient-x {
+    0% {
+      background-size: 100% 100%;
+      background-position: left center;
+    }
+    50% {
+      background-size: 200% 100%;
+      background-position: right center;
+    }
+    100% {
+      background-size: 100% 100%;
+      background-position: left center;
+    }
+  }
+
+  .animate-gradient-x {
+    animation: gradient-x 3s ease infinite;
+  }
+
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+</style>
+ss

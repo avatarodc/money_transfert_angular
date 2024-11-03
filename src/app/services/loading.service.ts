@@ -26,4 +26,4 @@ export class LoadingService {
   isLoading(): Observable<boolean> {
     return this.isLoadingSubject.asObservable();
   }
-} 
+}
