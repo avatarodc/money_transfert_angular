@@ -48,12 +48,34 @@ export interface Agent extends User {
 export interface CreateAgentRequest {
   firstName: string;
   lastName: string;
-  phone: string;
   email?: string;
   password: string;
   agencyName?: string;
+  phoneNumber: string;
+  dateOfBirth: Date;
+  address?: string;
+  city?: string;
+  country?: string;
 }
 
+export interface CreateUserRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: Date;
+  address?: string;
+  city?: string;
+  country?: string;
+  phoneNumber: string;
+  password: string;
+  role: string;
+  isVerified?: boolean;
+  isActive?: boolean;
+  kycStatus?: string;
+  currency?: string;
+  dailyLimit?: number;
+  monthlyLimit?: number;
+}
 export interface CreateClientRequest {
   firstName: string;
   lastName: string;
