@@ -59,3 +59,132 @@
     padding: 1rem;
   }
 }
+
+
+/* quick-actions.component.css */
+
+/* Styles de base pour le conteneur de pagination */
+::ng-deep .custom-paginator {
+  @apply bg-white/80 border-t border-gray-100;
+}
+
+/* Style du conteneur principal du paginateur */
+::ng-deep .custom-paginator .mat-mdc-paginator {
+  @apply bg-transparent;
+}
+
+/* Conteneur des éléments du paginateur */
+::ng-deep .custom-paginator .mat-mdc-paginator-container {
+  @apply flex flex-wrap items-center justify-between p-2 gap-2;
+  min-height: 56px;
+}
+
+/* Style mobile pour le conteneur */
+@media (max-width: 640px) {
+  ::ng-deep .custom-paginator .mat-mdc-paginator-container {
+    @apply flex-col items-center justify-center;
+  }
+}
+
+/* Label de la plage de pages */
+::ng-deep .custom-paginator .mat-mdc-paginator-range-label {
+  @apply text-sm text-gray-600 font-medium mx-4;
+}
+
+/* Conteneur de la taille de page */
+::ng-deep .custom-paginator .mat-mdc-paginator-page-size {
+  @apply flex items-center gap-2;
+}
+
+/* Label de la taille de page */
+::ng-deep .custom-paginator .mat-mdc-paginator-page-size-label {
+  @apply text-sm text-gray-600;
+}
+
+/* Select de la taille de page */
+::ng-deep .custom-paginator .mat-mdc-paginator-page-size-select {
+  @apply bg-gray-50 rounded-lg mx-2 min-w-[80px];
+}
+
+/* Conteneur des boutons de navigation */
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-container {
+  @apply flex items-center justify-center gap-2;
+}
+
+/* Boutons de navigation */
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-previous,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-next,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-first,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-last {
+  @apply bg-gray-50 hover:bg-gray-100 rounded-lg w-10 h-10 flex items-center justify-center !important;
+}
+
+/* Icônes des boutons de navigation */
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-previous .mat-mdc-paginator-icon,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-next .mat-mdc-paginator-icon,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-first .mat-mdc-paginator-icon,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-last .mat-mdc-paginator-icon {
+  @apply w-5 h-5 text-gray-600;
+}
+
+/* Style pour les boutons désactivés */
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-previous:disabled,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-next:disabled,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-first:disabled,
+::ng-deep .custom-paginator .mat-mdc-paginator-navigation-last:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Animation de transition pour les éléments */
+::ng-deep .custom-paginator .mat-mdc-paginator-range-actions {
+  @apply transition-all duration-200;
+}
+
+/* Style pour le loader des transactions */
+.transaction-loader {
+  @apply flex items-center justify-center p-8;
+}
+
+/* Style pour le conteneur des transactions */
+.transactions-container {
+  @apply relative overflow-hidden;
+  height: calc(100vh - 200px);
+}
+
+/* Styles pour la scrollbar personnalisée */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full;
+}
+
+/* Animation pour les transitions de page */
+.transaction-item {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 640px) {
+  .custom-paginator .mat-mdc-paginator-range-label {
+    @apply text-center w-full order-1;
+  }
+
+  .custom-paginator .mat-mdc-paginator-page-size {
+    @apply order-2 w-full justify-center;
+  }
+
+  .custom-paginator .mat-mdc-paginator-range-actions {
+    @apply order-3 w-full justify-center;
+  }
+}

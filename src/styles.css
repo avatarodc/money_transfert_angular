@@ -1,5 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Autres styles */
+*, ::before, ::after {
+    /* ... */
+}
+
+
+/* // Styles globaux pour Material */
+.mat-toolbar {
+  &.header {
+    padding: 0;
+
+    .mat-toolbar-row {
+      padding: 0;
+    }
+  }
+}
+
+/* // Animations globales */
+.animate-pulse {
+  @apply motion-safe:animate-[pulse_3s_cubic-bezier(0.4,0,0.6,1)_infinite];
+}
+
+/* // Glassmorphism global */
+.glass {
+  @apply bg-white/10 backdrop-blur-xl;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}

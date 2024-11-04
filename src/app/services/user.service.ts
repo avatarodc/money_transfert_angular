@@ -11,6 +11,7 @@ import {
   UserRole
 } from '../models/user.model';
 import { HttpParams } from '@angular/common/http';
+import { HttpOptions } from '../models/http-options.interface';
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
@@ -21,7 +22,9 @@ import { HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UserService extends ApiService {
-  private readonly BASE_PATH = `${environment.apiUrl}/users`;
+  private readonly BASE_PATH = `/users`;
+
+
 
   // Récupérer l'utilisateur connecté
   getCurrentUser(): Observable<ApiResponse<User>> {
@@ -126,9 +129,45 @@ export class UserService extends ApiService {
     });
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    // Si vous utilisez un BehaviorSubject pour l'état de connexion
-    // this.currentUserSubject.next(null);
+  // Rechercher des utilisateurs
+  searchUsers(query: string, role?: UserRole): Observable<ApiResponse<User[]>> {
+    let params = new HttpParams().set('searchTerm', query);
+    if (role) {
+      params = params.set('role', role);
+    }
+
+    return this.get<User[]>(`${this.BASE_PATH}/search`, { params });
   }
+
+  override logout(): void {
+    super.logout(); // Appelle la méthode logout du parent
+    // Ajoutez ici toute logique supplémentaire spécifique à UserService si nécessaire
+  }
+
+  // updateProfile(userId: string, formData: FormData, options?: HttpOptions): Observable<ApiResponse<User>> {
+  //   console.log('formData:', formData);
+  //   const headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //   });
+
+  //   return this.patch<User>(`${this.BASE_PATH}/${userId}`, formData, {
+  //     ...options,
+  //     headers: headers
+  //   });
+  // }
+
+  updateProfile(userId: string, data: FormData): Observable<ApiResponse<User>> {
+    console.log('Updating profile for user:', userId);
+    console.log('Data being sent:', data);
+
+    return this.patch<User>(`/users/${userId}`, data).pipe(
+        tap(response => console.log('Update profile response:', response)),
+        catchError(error => {
+            console.error('Update profile error:', error);
+            throw error;
+        })
+    );
+  }
+
+
 }

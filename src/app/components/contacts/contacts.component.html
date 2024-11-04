@@ -1,0 +1,60 @@
+<div class="max-w-6xl mx-auto mb-4">
+    <div class="bg-white/95 rounded-xl shadow-lg relative">
+        <div class="p-6">
+            <!-- Barre de recherche -->
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400 w-4 h-4"></i>
+                </div>
+                <input type="text"
+                       [(ngModel)]="searchTerm"
+                       (ngModelChange)="onSearchChange()"
+                       class="block w-full pl-11 pr-12 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 bg-gray-50/50"
+                       placeholder="Rechercher un utilisateur (min. 3 caractères)">
+                <button *ngIf="searchTerm"
+                        (click)="clearSearch()"
+                        class="absolute inset-y-0 right-0 pr-4 flex items-center">
+                    <i class="fas fa-times text-gray-400 w-4 h-4 hover:text-gray-600 transition-colors"></i>
+                </button>
+            </div>
+
+            <!-- Indicateur de chargement -->
+            <div *ngIf="isLoading" class="mt-4 text-center">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-200 border-t-blue-600"></div>
+            </div>
+
+            <!-- Résultats -->
+            <div class="relative">
+                <div *ngIf="showResults && !isLoading"
+                     class="absolute z-50 left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 max-h-64 overflow-y-auto">
+                    <!-- Liste des utilisateurs -->
+                    <div *ngIf="users.length > 0">
+                        <div *ngFor="let user of users"
+                             (click)="selectUser(user)"
+                             class="flex items-center space-x-4 p-3 hover:bg-gray-50 cursor-pointer transition-all duration-200"
+                             [class.bg-blue-50]="selectedUser?.id === user.id">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white">
+                                {{getInitial(user)}}
+                            </div>
+                            <div class="flex-grow">
+                                <div class="font-medium">{{getUserFullName(user)}}</div>
+                                <div class="text-sm text-gray-500">{{user.phoneNumber}}</div>
+                            </div>
+                            <!-- Indicateur de sélection -->
+                            <div *ngIf="selectedUser?.id === user.id"
+                                 class="text-blue-500">
+                                <i class="fas fa-check"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message si aucun résultat -->
+                    <div *ngIf="users.length === 0 && searchTerm.length >= 3"
+                         class="p-4 text-center text-gray-500">
+                        Aucun utilisateur trouvé
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

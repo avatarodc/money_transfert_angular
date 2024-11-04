@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { DemandeListComponent } from '../../components/demande/demande.component';
+import { TotalProfitComponent } from '../../components/total-profit/total-profit.component';
+import { DemandeService } from '../../services/demande.service';
+import { UserListComponent } from '../../components/users/user-list/user-list.component';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -8,15 +13,34 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
   imports: [
     CommonModule,
     CurrencyPipe,
-    DatePipe
+    DatePipe,
+    DemandeListComponent,
+    RouterModule,
+    TotalProfitComponent,
+    UserListComponent
   ]
 })
-export class DashboardAdminComponent {
+export class DashboardAdminComponent implements OnInit {
   now = new Date();
-  stats = {
-    totalUsers: 0,
-    activeUsers: 0,
-    totalTransactions: 0,
-    revenue: 0
-  };
+  totalDemandes: number = 0;
+
+  constructor(private demandeService: DemandeService) {}
+
+  ngOnInit() {
+    this.loadDemandesCount();
+  }
+
+  loadDemandesCount() {
+    this.demandeService.getDemandesCount().subscribe({
+      next: (response) => {
+        this.totalDemandes = response;
+        console.log("this.totalDemandes", this.totalDemandes);
+
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement du nombre de demandes', error);
+        this.totalDemandes = 0;
+      }
+    });
+  }
 }
