@@ -38,22 +38,15 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="apiService.isAdmin(); else notAdmin">
+    <ng-container *ngIf="apiService.isAdmin()">
+      <app-dashboard-admin class="block bg-white rounded-lg shadow-sm w-full"></app-dashboard-admin>
+    </ng-container>
 
-      <!-- <div class="flex flex-col lg:grid lg:grid-cols-3 gap-3 md:gap-4 lg:gap-6 items-center justify-center"> -->
-        <!-- Colonne transactions récentes -->
-        <!-- <app-recent-transactions class="block bg-white rounded-lg shadow-sm w-full"></app-recent-transactions> -->
-
-
-        <!-- Dashboard admin principal -->
-          <app-dashboard-admin class="block bg-white rounded-lg shadow-sm w-full"></app-dashboard-admin>
-      <!-- </div> -->
+    <ng-container *ngIf="apiService.isAgent()">
+      <app-agent-dashboard class="block bg-white rounded-lg shadow-sm w-full"></app-agent-dashboard>
     </ng-container>
   </ng-container>
 
   <app-footer class="mt-4 md:mt-8"></app-footer>
 
-  <ng-template #notAdmin>
-    <!-- <p>Non admin</p> -->
-  </ng-template>
 </div>

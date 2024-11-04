@@ -12,6 +12,7 @@ import { TransactionComponent } from '../transaction/transaction.component';
 import { ContactsComponent } from '../contacts/contacts.component';
 import { LoadingService } from '../../services/loading.service';
 import { DemandeListComponent } from '../demande/demande.component';
+import { AgentDashboardComponent } from '../agent/agent-dashboard/agent-dashboard.component';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { DemandeListComponent } from '../demande/demande.component';
     QrCodeComponent,
     ContactsComponent,
     DashboardAdminComponent,
+    AgentDashboardComponent,
     QuickActionsComponent,
     RecentTransactionsComponent,
     FooterComponent,

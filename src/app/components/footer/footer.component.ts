@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../services/api.service';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-footer',
@@ -18,9 +19,18 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
   // styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
-  constructor(public apiService: ApiService, private router: Router) {}
+  constructor(
+    public apiService: ApiService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   goToDashboard() {
     this.router.navigate(['/admin/dashboard']);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

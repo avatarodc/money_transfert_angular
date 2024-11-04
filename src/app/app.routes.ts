@@ -11,6 +11,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { TotalProfitComponent } from './components/total-profit/total-profit.component';
 import { CreateAgentComponent } from './components/agent/create-agent/create-agent.component';
 import { UserListComponent } from './components/users/user-list/user-list.component';
+import { AgentDashboardComponent } from './components/agent/agent-dashboard/agent-dashboard.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -24,4 +25,5 @@ export const routes: Routes = [
   { path: 'total-profit', component: TotalProfitComponent, canActivate: [AuthGuard] },
   { path: 'create-agent', component: CreateAgentComponent, canActivate: [AuthGuard] },
   { path: 'user-list', component: UserListComponent, canActivate: [AuthGuard] },
+  { path: 'agent/dashboard', component: AgentDashboardComponent, canActivate: [AuthGuard] },
 ];

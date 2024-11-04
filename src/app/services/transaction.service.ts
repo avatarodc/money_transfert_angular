@@ -28,9 +28,10 @@ export class TransactionService extends ApiService {
 
   // Créer un dépôt (agents uniquement)
   createDeposit(data: {
-    userId: string;
+    senderWalletId: string;
     amount: number;
-    description?: string;
+    description: string;
+    currency: string;
   }): Observable<ApiResponse<Transaction>> {
     return this.post<Transaction>(`${this.BASE_PATH}/deposit`, data);
   }

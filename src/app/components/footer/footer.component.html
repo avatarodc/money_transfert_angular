@@ -102,7 +102,17 @@
             </a>
           </li>
 
-
+        <li class="flex-1 text-center">
+          <a (click)="logout()"
+             class="flex flex-col items-center text-red-300 hover:text-red-200 p-1.5 sm:p-2 transition-all duration-300 hover:scale-105 sm:hover:scale-110 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            <span class="text-[10px] sm:text-xs mt-0.5 sm:mt-1">Déconnexion</span>
+          </a>
+        </li>
       </ul>
     </nav>
   </div>
