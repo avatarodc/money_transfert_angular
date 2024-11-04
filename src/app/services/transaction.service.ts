@@ -38,9 +38,11 @@ export class TransactionService extends ApiService {
 
   // Créer un retrait (agents uniquement)
   createWithdrawal(data: {
-    userId: string;
+    senderWalletId: string;
+    receiverWalletId: string;
     amount: number;
     description?: string;
+    currency: string;
   }): Observable<ApiResponse<Transaction>> {
     return this.post<Transaction>(`${this.BASE_PATH}/withdrawal`, data);
   }

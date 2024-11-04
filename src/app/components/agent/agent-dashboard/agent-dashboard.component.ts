@@ -20,6 +20,7 @@ interface Transaction {
 @Component({
   selector: 'app-agent-dashboard',
   templateUrl: './agent-dashboard.component.html',
+  styleUrls: ['./agent-dashboard.component.css'],
   standalone: true,
   imports: [
     CommonModule,
@@ -53,13 +54,20 @@ export class AgentDashboardComponent implements OnInit {
   ];
 
   // Ajoutez ces nouvelles propriétés
-  selectedUser: any = null;
+  selectedUser: User | null = null;
   selectedUserFullName: string = '';
 
   depositAmount: number = 0;
   depositDescription: string = '';
 
   currentUser: User | null = null;
+
+  withdrawalAmount: number = 0;
+  withdrawalDescription: string = '';
+
+  isLoading = false;
+  showSuccessNotification = false;
+  successMessage = '';
 
   constructor(
     private apiService: ApiService,
@@ -102,11 +110,12 @@ export class AgentDashboardComponent implements OnInit {
 
   // Méthodes de soumission des formulaires
   submitDeposit(): void {
-    if (!this.currentUser?.wallets?.[0]?.id) {
-      console.error('Wallet de l\'agent non trouvé');
+    if (!this.currentUser?.wallets?.[0]?.id || !this.selectedUser?.wallets?.[0]?.id) {
+      console.error('Wallet non trouvé');
       return;
     }
 
+    this.isLoading = true;
     const depositData = {
       senderWalletId: this.currentUser.wallets[0].id,
       receiverWalletId: this.selectedUser.wallets[0].id,
@@ -119,15 +128,14 @@ export class AgentDashboardComponent implements OnInit {
 
     this.transactionService.createDeposit(depositData).subscribe({
       next: (response) => {
-        console.log('Réponse du serveur:', response);
-        if (response.success) {
-          alert('Dépôt effectué avec succès');
-          this.isDepositModalOpen = false;
-          this.depositAmount = 0;
-          this.depositDescription = '';
-        }
+        this.isLoading = false;
+        this.isDepositModalOpen = false;
+        this.showSuccess('Dépôt effectué avec succès !');
+        this.depositAmount = 0;
+        this.depositDescription = '';
       },
       error: (error) => {
+        this.isLoading = false;
         console.error('Détails de l\'erreur:', {
           status: error.status,
           message: error.message,
@@ -139,8 +147,33 @@ export class AgentDashboardComponent implements OnInit {
   }
 
   submitWithdrawal(): void {
-    // Logique pour soumettre le retrait
-    this.isWithdrawalModalOpen = false;
+    if (!this.currentUser?.wallets?.[0]?.id || !this.selectedUser?.wallets?.[0]?.id) {
+      console.error('Wallets non trouvés');
+      return;
+    }
+
+    this.isLoading = true;
+    const withdrawalData = {
+      senderWalletId: this.selectedUser.wallets[0].id,
+      receiverWalletId: this.currentUser.wallets[0].id,
+      amount: this.withdrawalAmount,
+      description: this.withdrawalDescription,
+      currency: 'FCFA'
+    };
+
+    this.transactionService.createWithdrawal(withdrawalData).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.isWithdrawalModalOpen = false;
+        this.showSuccess('Retrait effectué avec succès !');
+        this.withdrawalAmount = 0;
+        this.withdrawalDescription = '';
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Erreur lors du retrait:', error);
+      }
+    });
   }
 
   submitCreateClient(): void {
@@ -155,5 +188,14 @@ export class AgentDashboardComponent implements OnInit {
     this.selectedUserFullName = `${user.firstName} ${user.lastName}`;
     // Forcer la détection des changements si nécessaire
     this.changeDetectorRef.detectChanges();
+  }
+
+  // Méthode pour afficher la notification
+  private showSuccess(message: string) {
+    this.successMessage = message;
+    this.showSuccessNotification = true;
+    setTimeout(() => {
+      this.showSuccessNotification = false;
+    }, 3000); // Disparaît après 3 secondes
   }
 }
